@@ -1,308 +1,530 @@
-🕒 Sistema de Registro de Jornada Laboral
-📋 Descripción
-API REST desarrollada con Spring Boot para la gestión del registro de jornada laboral en una empresa. El sistema permite administrar departamentos, empleados y controlar los fichajes de entrada y salida de forma automatizada.
-
-🏗️ Modelo de Datos
-Estructura de Entidades
-Departamento
-id (Long) - Identificador único
-
-nombre (String) - Nombre del departamento (único)
-
-presupuesto (BigDecimal) - Presupuesto anual
-
-Empleado
-id (Long) - Identificador único
-
-nombreCompleto (String) - Nombre completo
-
-cargo (String) - Puesto de trabajo
-
-salario (BigDecimal) - Salario anual
-
-departamento (Departamento) - Departamento asignado
-
-Fichaje
-id (Long) - Identificador único
-
-momento (LocalDateTime) - Fecha y hora del registro
-
-tipo (Enum) - ENTRADA o SALIDA
-
-empleado (Empleado) - Empleado asociado
-
-🚀 Endpoints Principales
-📍 Departamentos
-Método	Endpoint	Descripción
-GET	/api/v1/departamentos	Listar todos
-GET	/api/v1/departamentos/{id}	Obtener por ID
-POST	/api/v1/departamentos	Crear nuevo
-PUT	/api/v1/departamentos/{id}	Actualizar
-DELETE	/api/v1/departamentos/{id}	Eliminar
-👥 Empleados
-Método	Endpoint	Descripción
-GET	/api/v1/empleados	Listar todos
-GET	/api/v1/empleados/{id}	Obtener por ID
-POST	/api/v1/empleados	Crear nuevo
-PUT	/api/v1/empleados/{id}	Actualizar
-PUT	/api/v1/empleados/{empId}/departamento/{deptId}	Asignar a departamento
-⏰ Fichajes
-Método	Endpoint	Descripción
-POST	/api/v1/empleados/{id}/fichar	Registrar fichaje (alterna automáticamente)
-GET	/api/v1/empleados/{id}/fichajes	Historial de fichajes
-⚙️ Instalación y Ejecución
-Prerrequisitos
-Java 17+
-
-Maven 3.6+
-
-🛠️ Pasos
-Clonar y compilar
-
-bash
-git clone [url-del-repositorio]
-cd registro-jornada
-mvn clean compile
-Ejecutar la aplicación
-
-bash
-mvn spring-boot:run
-Acceder a la aplicación
-
+🏢 SISTEMA DE REGISTRO DE JORNADA LABORAL
+<!DOCTYPE html><html lang="es"> <head> <meta charset="UTF-8"> <meta name="viewport" content="width=device-width, initial-scale=1.0"> <title>Documentación API - Registro Jornada</title> <style> :root { --primary: #2563eb; --secondary: #7c3aed; --success: #059669; --warning: #d97706; --danger: #dc2626; --dark: #1e293b; --light: #f8fafc; --gray: #64748b; }
 text
-http://localhost:8080
-📚 Documentación
-Swagger UI
-Documentación interactiva disponible en:
-
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+    }
+    
+    body {
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        min-height: 100vh;
+        color: var(--dark);
+        line-height: 1.6;
+    }
+    
+    .container {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 20px;
+    }
+    
+    .header {
+        text-align: center;
+        background: white;
+        padding: 40px;
+        border-radius: 20px;
+        box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+        margin-bottom: 30px;
+        position: relative;
+        overflow: hidden;
+    }
+    
+    .header::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 4px;
+        background: linear-gradient(90deg, var(--primary), var(--secondary));
+    }
+    
+    .badges {
+        display: flex;
+        justify-content: center;
+        gap: 10px;
+        margin: 20px 0;
+        flex-wrap: wrap;
+    }
+    
+    .badge {
+        padding: 8px 16px;
+        border-radius: 20px;
+        font-size: 0.9em;
+        font-weight: 600;
+        color: white;
+    }
+    
+    .badge.spring { background: var(--success); }
+    .badge.java { background: var(--warning); }
+    .badge.api { background: var(--primary); }
+    .badge.database { background: var(--secondary); }
+    
+    .grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+        gap: 20px;
+        margin: 30px 0;
+    }
+    
+    .card {
+        background: white;
+        padding: 30px;
+        border-radius: 15px;
+        box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+    
+    .card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 20px 40px rgba(0,0,0,0.15);
+    }
+    
+    .card h3 {
+        color: var(--primary);
+        margin-bottom: 15px;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+    }
+    
+    .card h3 i {
+        font-size: 1.2em;
+    }
+    
+    .endpoint {
+        background: var(--light);
+        padding: 15px;
+        border-radius: 10px;
+        margin: 10px 0;
+        border-left: 4px solid var(--primary);
+    }
+    
+    .endpoint.get { border-left-color: var(--success); }
+    .endpoint.post { border-left-color: var(--warning); }
+    .endpoint.put { border-left-color: var(--primary); }
+    .endpoint.delete { border-left-color: var(--danger); }
+    
+    .method {
+        display: inline-block;
+        padding: 4px 12px;
+        border-radius: 6px;
+        color: white;
+        font-weight: bold;
+        font-size: 0.8em;
+        margin-right: 10px;
+    }
+    
+    .method.get { background: var(--success); }
+    .method.post { background: var(--warning); }
+    .method.put { background: var(--primary); }
+    .method.delete { background: var(--danger); }
+    
+    .diagram {
+        background: var(--light);
+        padding: 25px;
+        border-radius: 15px;
+        text-align: center;
+        margin: 20px 0;
+    }
+    
+    .entity {
+        display: inline-block;
+        background: white;
+        padding: 20px;
+        margin: 10px;
+        border-radius: 10px;
+        box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        min-width: 200px;
+    }
+    
+    .entity h4 {
+        color: var(--primary);
+        margin-bottom: 10px;
+    }
+    
+    .relationship {
+        margin: 20px 0;
+        font-size: 1.2em;
+        color: var(--gray);
+    }
+    
+    .code-block {
+        background: var(--dark);
+        color: var(--light);
+        padding: 20px;
+        border-radius: 10px;
+        margin: 15px 0;
+        overflow-x: auto;
+    }
+    
+    .steps {
+        counter-reset: step;
+    }
+    
+    .step {
+        position: relative;
+        padding-left: 60px;
+        margin: 20px 0;
+    }
+    
+    .step::before {
+        counter-increment: step;
+        content: counter(step);
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 40px;
+        height: 40px;
+        background: var(--primary);
+        color: white;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: bold;
+    }
+    
+    .feature-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        gap: 15px;
+    }
+    
+    .feature {
+        display: flex;
+        align-items: center;
+        gap: 15px;
+        padding: 15px;
+        background: var(--light);
+        border-radius: 10px;
+    }
+    
+    .feature i {
+        font-size: 1.5em;
+        color: var(--primary);
+    }
+    
+    .tech-stack {
+        display: flex;
+        justify-content: center;
+        flex-wrap: wrap;
+        gap: 15px;
+        margin: 20px 0;
+    }
+    
+    .tech-item {
+        background: white;
+        padding: 15px 25px;
+        border-radius: 25px;
+        box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        font-weight: 600;
+        color: var(--dark);
+    }
+</style>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head> <body> <div class="container"> <!-- HEADER --> <div class="header"> <h1>🏢 SISTEMA DE REGISTRO DE JORNADA LABORAL</h1> <p>API REST completa desarrollada con Spring Boot para la gestión integral de control horario</p>
 text
-http://localhost:8080/swagger-ui.html
-Base de datos H2
-Consola de administración:
+        <div class="badges">
+            <span class="badge spring"><i class="fas fa-leaf"></i> Spring Boot 3.x</span>
+            <span class="badge java"><i class="fab fa-java"></i> Java 17+</span>
+            <span class="badge api"><i class="fas fa-code"></i> API REST</span>
+            <span class="badge database"><i class="fas fa-database"></i> H2 Database</span>
+        </div>
+    </div>
 
-text
-http://localhost:8080/h2-console
-JDBC URL: jdbc:h2:mem:testdb
+    <!-- CARACTERÍSTICAS PRINCIPALES -->
+    <div class="card">
+        <h2>🚀 Características Principales</h2>
+        <div class="feature-grid">
+            <div class="feature">
+                <i class="fas fa-sync-alt"></i>
+                <div>
+                    <strong>Fichaje Automático</strong>
+                    <p>Alterna inteligentemente entre ENTRADA/SALIDA</p>
+                </div>
+            </div>
+            <div class="feature">
+                <i class="fas fa-chart-line"></i>
+                <div>
+                    <strong>Control de Presupuesto</strong>
+                    <p>Valida salarios vs presupuesto departamental</p>
+                </div>
+            </div>
+            <div class="feature">
+                <i class="fas fa-shield-alt"></i>
+                <div>
+                    <strong>Validación de Negocio</strong>
+                    <p>Previene errores y fichajes duplicados</p>
+                </div>
+            </div>
+            <div class="feature">
+                <i class="fas fa-book"></i>
+                <div>
+                    <strong>Documentación Completa</strong>
+                    <p>Swagger UI integrado y colección Postman</p>
+                </div>
+            </div>
+        </div>
+    </div>
 
-User: sa
+    <!-- MODELO DE DATOS -->
+    <div class="card">
+        <h2>🗃️ Modelo de Datos</h2>
+        
+        <div class="diagram">
+            <div class="entity">
+                <h4>📊 Departamento</h4>
+                <p><strong>id</strong> (Long, PK)</p>
+                <p><strong>nombre</strong> (String, único)</p>
+                <p><strong>presupuesto</strong> (BigDecimal)</p>
+            </div>
+            
+            <div class="relationship">
+                <i class="fas fa-arrows-alt-h"></i> 1 ←→ N
+            </div>
+            
+            <div class="entity">
+                <h4>👤 Empleado</h4>
+                <p><strong>id</strong> (Long, PK)</p>
+                <p><strong>nombreCompleto</strong> (String)</p>
+                <p><strong>cargo</strong> (String)</p>
+                <p><strong>salario</strong> (BigDecimal)</p>
+            </div>
+            
+            <div class="relationship">
+                <i class="fas fa-arrows-alt-h"></i> 1 ←→ N
+            </div>
+            
+            <div class="entity">
+                <h4>⏰ Fichaje</h4>
+                <p><strong>id</strong> (Long, PK)</p>
+                <p><strong>momento</strong> (LocalDateTime)</p>
+                <p><strong>tipo</strong> (Enum: ENTRADA/SALIDA)</p>
+            </div>
+        </div>
+    </div>
 
-Password: (vacío)
+    <!-- ENDPOINTS DE LA API -->
+    <div class="card">
+        <h2>📡 Endpoints de la API</h2>
+        
+        <h3><i class="fas fa-building"></i> Departamentos</h3>
+        <div class="endpoint get">
+            <span class="method get">GET</span>
+            <strong>/api/v1/departamentos</strong>
+            <p>Obtener todos los departamentos</p>
+        </div>
+        <div class="endpoint post">
+            <span class="method post">POST</span>
+            <strong>/api/v1/departamentos</strong>
+            <p>Crear nuevo departamento</p>
+        </div>
+        <div class="endpoint put">
+            <span class="method put">PUT</span>
+            <strong>/api/v1/departamentos/{id}</strong>
+            <p>Actualizar departamento existente</p>
+        </div>
 
-🧪 Pruebas
-Colección Postman
-El repositorio incluye postman-collection.json con todos los endpoints configurados para pruebas.
+        <h3><i class="fas fa-users"></i> Empleados</h3>
+        <div class="endpoint get">
+            <span class="method get">GET</span>
+            <strong>/api/v1/empleados</strong>
+            <p>Listar todos los empleados</p>
+        </div>
+        <div class="endpoint post">
+            <span class="method post">POST</span>
+            <strong>/api/v1/empleados</strong>
+            <p>Crear nuevo empleado</p>
+        </div>
+        <div class="endpoint put">
+            <span class="method put">PUT</span>
+            <strong>/api/v1/empleados/{empleadoId}/departamento/{deptoId}</strong>
+            <p>Asignar empleado a departamento</p>
+        </div>
 
-Ejemplos de Uso
-Crear departamento:
+        <h3><i class="fas fa-clock"></i> Fichajes</h3>
+        <div class="endpoint post">
+            <span class="method post">POST</span>
+            <strong>/api/v1/empleados/{empleadoId}/fichar</strong>
+            <p>Registrar fichaje (sistema automático ENTRADA/SALIDA)</p>
+        </div>
+        <div class="endpoint get">
+            <span class="method get">GET</span>
+            <strong>/api/v1/empleados/{empleadoId}/fichajes</strong>
+            <p>Obtener historial completo de fichajes</p>
+        </div>
+    </div>
 
-http
-POST /api/v1/departamentos
-{
-  "nombre": "Desarrollo",
-  "presupuesto": 150000.00
-}
-Registrar fichaje:
+    <!-- INSTALACIÓN Y CONFIGURACIÓN -->
+    <div class="card">
+        <h2>⚙️ Instalación y Configuración</h2>
+        
+        <div class="steps">
+            <div class="step">
+                <h4>Prerrequisitos</h4>
+                <p>☕ Java 17+ | 🍃 Maven 3.6+</p>
+            </div>
+            
+            <div class="step">
+                <h4>Clonar y Compilar</h4>
+                <div class="code-block">
+                    git clone https://github.com/tu-usuario/registro-jornada.git<br>
+                    cd registro-jornada<br>
+                    mvn clean compile
+                </div>
+            </div>
+            
+            <div class="step">
+                <h4>Ejecutar la Aplicación</h4>
+                <div class="code-block">
+                    mvn spring-boot:run
+                </div>
+            </div>
+            
+            <div class="step">
+                <h4>Acceso a la Aplicación</h4>
+                <p>🌐 <strong>URL Principal:</strong> http://localhost:8080</p>
+            </div>
+        </div>
+    </div>
 
-http
-POST /api/v1/empleados/1/fichar
-⚠️ Gestión de Errores
-La API maneja los siguientes errores con ProblemDetail:
+    <!-- DOCUMENTACIÓN Y HERRAMIENTAS -->
+    <div class="card">
+        <h2>📚 Documentación y Herramientas</h2>
+        
+        <div class="grid">
+            <div class="card">
+                <h3><i class="fas fa-book-open"></i> Swagger UI</h3>
+                <p>Documentación interactiva completa de la API</p>
+                <div class="endpoint get">
+                    <strong>http://localhost:8080/swagger-ui.html</strong>
+                </div>
+            </div>
+            
+            <div class="card">
+                <h3><i class="fas fa-database"></i> Consola H2</h3>
+                <p>Base de datos en memoria - DesarrolloT</p>
+                <div class="endpoint get">
+                    <strong>http://localhost:8080/h2-console</strong>
+                    <p>JDBC: jdbc:h2:mem:testdb | User: sa</p>
+                </div>
+            </div>
+            
+            <div class="card">
+                <h3><i class="fas fa-file-export"></i> Postman</h3>
+                <p>Colección completa para testing</p>
+                <p>📁 <strong>postman-collection.json</strong></p>
+            </div>
+        </div>
+    </div>
 
-404 NOT FOUND - Entidad no encontrada
+    <!-- EJEMPLOS DE USO -->
+    <div class="card">
+        <h2>💡 Ejemplos de Uso</h2>
+        
+        <h3>Crear Departamento</h3>
+        <div class="code-block">
+            POST /api/v1/departamentos<br>
+            Content-Type: application/json<br><br>
+            {<br>
+            &nbsp;&nbsp;"nombre": "Desarrollo Software",<br>
+            &nbsp;&nbsp;"presupuesto": 200000.00<br>
+            }
+        </div>
+        
+        <h3>Registrar Fichaje</h3>
+        <div class="code-block">
+            POST /api/v1/empleados/1/fichar<br><br>
+            // Respuesta automática:<br>
+            {<br>
+            &nbsp;&nbsp;"tipo": "ENTRADA",<br>
+            &nbsp;&nbsp;"momento": "2025-01-20T08:00:00",<br>
+            &nbsp;&nbsp;"empleado": "Ana García López"<br>
+            }
+        </div>
+    </div>
 
-409 CONFLICT - Fichaje duplicado (ej: dos entradas consecutivas)
+    <!-- GESTIÓN DE ERRORES -->
+    <div class="card">
+        <h2>⚠️ Gestión de Errores</h2>
+        
+        <div class="grid">
+            <div class="card">
+                <h3 style="color: var(--danger);">🔍 404 Not Found</h3>
+                <p><strong>EntidadNoEncontradaException</strong></p>
+                <p>Recurso solicitado no existe</p>
+            </div>
+            
+            <div class="card">
+                <h3 style="color: var(--warning);">⚡ 409 Conflict</h3>
+                <p><strong>FichajeDuplicadoException</strong></p>
+                <p>Dos fichajes consecutivos del mismo tipo</p>
+            </div>
+            
+            <div class="card">
+                <h3 style="color: var(--danger);">💰 400 Bad Request</h3>
+                <p><strong>PresupuestoExcedidoException</strong></p>
+                <p>Salarios exceden presupuesto del departamento</p>
+            </div>
+        </div>
+    </div>
 
-400 BAD REQUEST - Presupuesto excedido al asignar salarios
+    <!-- TECNOLOGÍAS -->
+    <div class="card">
+        <h2>🛠️ Stack Tecnológico</h2>
+        
+        <div class="tech-stack">
+            <div class="tech-item">Spring Boot 3.x</div>
+            <div class="tech-item">Spring Data JPA</div>
+            <div class="tech-item">Spring MVC</div>
+            <div class="tech-item">H2 Database</div>
+            <div class="tech-item">OpenAPI 3.0</div>
+            <div class="tech-item">Swagger UI</div>
+            <div class="tech-item">Bean Validation</div>
+            <div class="tech-item">Maven</div>
+        </div>
+    </div>
 
-🏆 Características Técnicas
-Framework: Spring Boot 3.x
+    <!-- INFORMACIÓN ACADÉMICA -->
+    <div class="card">
+        <h2>🎓 Información del Proyecto</h2>
+        
+        <div class="grid">
+            <div class="card">
+                <h3><i class="fas fa-graduation-cap"></i> Académico</h3>
+                <p><strong>Tipo:</strong> Registro de Jornada - Tipo C</p>
+                <p><strong>Módulos:</strong> Acceso a Datos + Servicios y Procesos</p>
+            </div>
+            
+            <div class="card">
+                <h3><i class="fas fa-calendar"></i> Temporal</h3>
+                <p><strong>Curso:</strong> 2025-26</p>
+                <p><strong>Entrega:</strong> 28 Noviembre 2025</p>
+            </div>
+            
+            <div class="card">
+                <h3><i class="fas fa-code"></i> Desarrollo</h3>
+                <p><strong>Metodología:</strong> Scrum Express</p>
+                <p><strong>Entrega:</strong> Repositorio GitHub</p>
+            </div>
+        </div>
+    </div>
 
-Documentación: OpenAPI 3.0 + Swagger UI
-
-Base de datos: H2 (memoria)
-
-Validación: Bean Validation
-
-DTOs: Pattern para transferencia de datos
-
-Gestión de errores: ProblemDetail RFC 7807
-
-📅 Información del Proyecto
-Tipo: Proyecto educativo - Registro de Jornada Tipo C
-
-Módulos: Acceso a Datos + Programación de Servicios y Procesos
-
-Curso: 2025-26
-
-Fecha de entrega: 28 de Noviembre de 2025
-
-👨‍💻 Desarrollo
-Proyecto desarrollado individualmente siguiendo metodologías ágiles y buenas prácticas de desarrollo con Spring Boot.
-
-y no hay alguna forma para que quede mas bonito y formateado en el readme?
-🏢 Sistema de Registro de Jornada Laboral
-<div align="center">
-https://img.shields.io/badge/Spring%2520Boot-3.x-brightgreen
-https://img.shields.io/badge/Java-17%252B-orange
-https://img.shields.io/badge/API-REST-blue
-https://img.shields.io/badge/License-MIT-green
-
-Sistema completo para la gestión de fichajes y control horario de empleados
-
+    <!-- FOOTER -->
+    <div class="header" style="text-align: center; margin-top: 40px;">
+        <h3>¿Necesitas Ayuda?</h3>
+        <p>Consulta la documentación en Swagger o abre un issue en el repositorio</p>
+        <div class="badges">
+            <span class="badge spring"><i class="fas fa-book"></i> Documentación Completa</span>
+            <span class="badge java"><i class="fas fa-code-branch"></i> Código Abierto</span>
+        </div>
+        <p style="margin-top: 20px; color: var(--gray);">
+            Desarrollado con ❤️ usando Spring Boot | Curso 2025-26
+        </p>
+    </div>
 </div>
-📖 Tabla de Contenidos
-Descripción
-
-Características
-
-Modelo de Datos
-
-Instalación
-
-Uso de la API
-
-Documentación
-
-Tecnologías
-
-🎯 Descripción
-Sistema API REST desarrollado con Spring Boot para la gestión integral del registro de jornada laboral. Permite administrar departamentos, empleados y controlar los fichajes de entrada/salida de forma automatizada e inteligente.
-
-✨ Características
-Funcionalidad	Descripción
-🔄 Fichaje Automático	Sistema que alterna automáticamente entre ENTRADA y SALIDA
-💰 Control de Presupuesto	Valida que los salarios no excedan el presupuesto del departamento
-📊 Gestión Completa	CRUD completo para todas las entidades
-🛡️ Validación de Negocio	Previene fichajes duplicados y errores comunes
-📚 Documentación Interactiva	Swagger UI integrado para testing en tiempo real
-🗃️ Modelo de Datos
-📊 Diagrama de Entidades
-text
-┌───────────────┐    ┌──────────────┐    ┌──────────────┐
-│  Departamento │    │   Empleado   │    │   Fichaje    │
-├───────────────┤    ├──────────────┤    ├──────────────┤
-│ id (PK)       │1   │ id (PK)      │1   │ id (PK)      │
-│ nombre        │───∞│ nombreComp   │───∞│ momento      │
-│ presupuesto   │    │ cargo        │    │ tipo         │
-└───────────────┘    │ salario      │    │ empleado_id  │
-                     │ depto_id     │    └──────────────┘
-                     └──────────────┘
-🏷️ Detalles de Entidades
-Entidad	Campos Principales
-Departamento	id, nombre, presupuesto
-Empleado	id, nombreCompleto, cargo, salario
-Fichaje	id, momento, tipo (ENTRADA/SALIDA)
-🚀 Instalación Rápida
-Prerrequisitos
-☕ Java 17 o superior
-
-🍃 Maven 3.6+
-
-⚡ Pasos de Instalación
-bash
-# 1. Clonar el repositorio
-git clone https://github.com/tu-usuario/registro-jornada.git
-cd registro-jornada
-
-# 2. Compilar el proyecto
-mvn clean compile
-
-# 3. Ejecutar la aplicación
-mvn spring-boot:run
-🔧 Configuración
-La aplicación se ejecutará en: http://localhost:8080
-
-📡 Uso de la API
-🏷️ Gestión de Departamentos
-Método	Endpoint	Descripción
-GET	/api/v1/departamentos	📋 Listar todos los departamentos
-POST	/api/v1/departamentos	➕ Crear nuevo departamento
-PUT	/api/v1/departamentos/{id}	✏️ Actualizar departamento
-Ejemplo crear departamento:
-
-json
-POST /api/v1/departamentos
-{
-  "nombre": "Desarrollo Software",
-  "presupuesto": 200000.00
-}
-👥 Gestión de Empleados
-Método	Endpoint	Descripción
-GET	/api/v1/empleados	👨‍💼 Listar empleados
-POST	/api/v1/empleados	🆕 Crear empleado
-PUT	/api/v1/empleados/{empId}/departamento/{deptId}	🔗 Asignar a departamento
-⏰ Sistema de Fichajes
-Método	Endpoint	Descripción
-POST	/api/v1/empleados/{id}/fichar	🎫 Registrar fichaje (automático)
-GET	/api/v1/empleados/{id}/fichajes	📈 Ver historial
-Ejemplo de fichaje:
-
-http
-POST /api/v1/empleados/1/fichar
-# Respuesta: {"tipo": "ENTRADA", "momento": "2025-01-20T08:00:00"}
-📚 Documentación
-🔍 Swagger UI
-Accede a la documentación interactiva completa:
-
-text
-http://localhost:8080/swagger-ui.html
-🗄️ Base de Datos H2
-Consola de administración embebida:
-
-text
-http://localhost:8080/h2-console
-JDBC URL: jdbc:h2:mem:testdb
-
-Usuario: sa
-
-Contraseña: (vacío)
-
-🧪 Colección Postman
-Incluida en el repositorio: postman-collection.json
-
-⚠️ Manejo de Errores
-La API utiliza estándares RFC 7807 con ProblemDetail:
-
-Error	Código	Descripción
-EntidadNoEncontrada	404	Recurso no encontrado
-FichajeDuplicado	409	Entrada/Salida consecutiva del mismo tipo
-PresupuestoExcedido	400	Salarios exceden presupuesto del departamento
-🛠️ Tecnologías
-<div align="center">
-Capa	Tecnologías
-Backend	Spring Boot 3.x, Spring Data JPA, Spring MVC
-Base de Datos	H2 (desarrollo), JPA/Hibernate
-Documentación	OpenAPI 3.0, Swagger UI
-Validación	Bean Validation, Custom Validators
-Testing	JUnit 5, Mockito, Postman
-</div>
-📊 Estructura del Proyecto
-text
-src/
-├── main/
-│   ├── java/
-│   │   └── com/
-│   │       └── empresa/
-│   │           └── jornada/
-│   │               ├── controller/     # 🎮 Controladores REST
-│   │               ├── service/        # ⚙️ Lógica de negocio
-│   │               ├── repository/     # 🗄️ Acceso a datos
-│   │               ├── model/          # 🏷️ Entidades JPA
-│   │               ├── dto/            # 📦 Objetos transferencia
-│   │               └── exception/      # ⚠️ Manejo errores
-│   └── resources/
-│       ├── application.properties      # ⚙️ Configuración
-└── test/                              # 🧪 Tests
-🎓 Información Académica
-Aspecto	Detalle
-Tipo de Proyecto	Registro de Jornada - Tipo C
-Módulos	Acceso a Datos, Programación de Servicios y Procesos
-Curso Académico	2025-26
-Fecha de Entrega	28 de Noviembre de 2025
-<div align="center">
-¿Preguntas o problemas?
-Consulta la documentación en Swagger o abre un issue en el repositorio.
-
-Desarrollado con ❤️ usando Spring Boot
-
-</div>
+</body> </html>
