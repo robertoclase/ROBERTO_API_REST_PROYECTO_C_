@@ -2,7 +2,9 @@
 
 
 🕒 Sistema de Registro de Jornada Laboral
+
 📋 Descripción
+
 API REST desarrollada con Spring Boot para la gestión del registro de jornada laboral en una empresa. El sistema permite administrar departamentos, empleados y controlar los fichajes de entrada y salida de forma automatizada.
 
 🏗️ Modelo de Datos
