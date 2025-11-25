@@ -25,4 +25,5 @@ public class Fichaje {
     @ManyToOne()
     @JoinColumn(name = "empleado_id", nullable = false)
     private Empleado empleado;
+
 }
