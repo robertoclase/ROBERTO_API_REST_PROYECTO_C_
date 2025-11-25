@@ -21,7 +21,6 @@ public class Departamento {
     private String nombre;
     private BigDecimal presupuesto;
 
-    @OneToMany(mappedBy = "departamento")
+    @OneToMany(mappedBy = "departamento", cascade = CascadeType.ALL)
     private List<Empleado> empleados = new ArrayList<>();
-
 }

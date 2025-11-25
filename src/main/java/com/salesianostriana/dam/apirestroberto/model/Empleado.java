@@ -6,6 +6,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.List;
 
 @Data
@@ -17,14 +18,15 @@ public class Empleado {
     @Id
     @GeneratedValue
     private Long id;
+
     private String nombreCompleto;
     private String cargo;
     private BigDecimal salario;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "departamento_id")
     private Departamento departamento;
 
-    @OneToMany
-    private List<Fichaje> fichajes;
-
+    @OneToMany(mappedBy = "empleado", cascade = CascadeType.ALL)
+    private List<Fichaje> fichajes = new ArrayList<>();
 }
