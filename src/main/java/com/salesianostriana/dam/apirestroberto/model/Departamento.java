@@ -1,13 +1,13 @@
 package com.salesianostriana.dam.apirestroberto.model;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.List;
 
 @Data
 @NoArgsConstructor
@@ -20,5 +20,8 @@ public class Departamento {
     private Long id;
     private String nombre;
     private BigDecimal presupuesto;
+
+    @OneToMany(mappedBy = "departamento")
+    private List<Empleado> empleados = new ArrayList<>();
 
 }

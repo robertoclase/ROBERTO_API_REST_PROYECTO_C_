@@ -1,6 +1,6 @@
 package com.salesianostriana.dam.apirestroberto.model;
 
-public enum TipoFichaje {
+public enum Tipo {
     ENTRADA,
     SALIDA
 }
