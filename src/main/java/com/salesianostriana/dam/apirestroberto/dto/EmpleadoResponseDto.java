@@ -1,18 +1,26 @@
-// EmpleadoResponseDto.java
 package com.salesianostriana.dam.apirestroberto.dto;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import com.salesianostriana.dam.apirestroberto.model.Empleado;
 import java.math.BigDecimal;
 
-@Data
-@NoArgsConstructor
-@AllArgsConstructor
-public class EmpleadoResponseDto {
-    private Long id;
-    private String nombreCompleto;
-    private String cargo;
-    private BigDecimal salario;
-    private String nombreDepartamento;
+public record EmpleadoResponseDto(
+        Long id,
+        String nombreCompleto,
+        String cargo,
+        BigDecimal salario,
+        String nombreDepartamento
+) {
+    public static EmpleadoResponseDto from(Empleado empleado) {
+        String nombreDepto = empleado.getDepartamento() != null
+                ? empleado.getDepartamento().getNombre()
+                : "Sin departamento";
+
+        return new EmpleadoResponseDto(
+                empleado.getId(),
+                empleado.getNombreCompleto(),
+                empleado.getCargo(),
+                empleado.getSalario(),
+                nombreDepto
+        );
+    }
 }

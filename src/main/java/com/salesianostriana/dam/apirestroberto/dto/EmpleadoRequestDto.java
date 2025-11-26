@@ -1,17 +1,23 @@
-// EmpleadoRequestDto.java
 package com.salesianostriana.dam.apirestroberto.dto;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import com.salesianostriana.dam.apirestroberto.model.Empleado;
+
 import java.math.BigDecimal;
 
-@Data
-@NoArgsConstructor
-@AllArgsConstructor
-public class EmpleadoRequestDto {
-    private String nombreCompleto;
-    private String cargo;
-    private BigDecimal salario;
-    private Long departamentoId;
+public record EmpleadoRequestDto(
+        String nombreCompleto,
+        String cargo,
+        BigDecimal salario,
+        Long departamentoId
+) {
+    public Empleado toEntity() {
+        return new Empleado(
+                null,
+                this.nombreCompleto(),
+                this.cargo(),
+                this.salario(),
+                null,
+                new java.util.ArrayList<>()
+        );
+    }
 }
