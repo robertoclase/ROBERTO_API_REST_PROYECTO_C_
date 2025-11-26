@@ -1,3 +1,4 @@
+
 package com.salesianostriana.dam.apirestroberto.service;
 
 import com.salesianostriana.dam.apirestroberto.exception.FichajeDuplicadoException;
@@ -31,27 +32,32 @@ public class FichajeService {
             throw new NotFoundException("Empleado no encontrado");
         }
 
-        Tipo tipo = determinarTipoFichaje(empleadoId);
 
-        Fichaje fichaje = new Fichaje(
-                null,
-                LocalDateTime.now(),
-                tipo,
-                empleadoRepository.getReferenceById(empleadoId)
-        );
+        var ultimoFichaje = fichajeRepository.findTopByEmpleadoIdOrderByMomentoDesc(empleadoId);
+
+        if (ultimoFichaje.isPresent()) {
+            Tipo ultimoTipo = ultimoFichaje.get().getTipo();
+
+            if (ultimoTipo == Tipo.ENTRADA) {
+                throw new FichajeDuplicadoException(
+                        "No se puede registrar una ENTRADA cuando el último fichaje ya fue una ENTRADA"
+                );
+            }
+
+        }
+
+        Tipo tipo = determinarTipoFichaje(empleadoId);
+        Fichaje fichaje = new Fichaje(null, LocalDateTime.now(), tipo,
+                empleadoRepository.getReferenceById(empleadoId));
 
         return fichajeRepository.save(fichaje);
     }
 
     private Tipo determinarTipoFichaje(Long empleadoId) {
         return fichajeRepository.findTopByEmpleadoIdOrderByMomentoDesc(empleadoId)
-                .map(ultimoFichaje -> {
-                    if (ultimoFichaje.getTipo() == Tipo.ENTRADA) {
-                        return Tipo.SALIDA;
-                    } else {
-                        return Tipo.ENTRADA;
-                    }
-                })
-                .orElse(Tipo.ENTRADA); // Primer fichaje es ENTRADA
+                .map(ultimoFichaje ->
+                        ultimoFichaje.getTipo() == Tipo.ENTRADA ? Tipo.SALIDA : Tipo.ENTRADA
+                )
+                .orElse(Tipo.ENTRADA);
     }
 }

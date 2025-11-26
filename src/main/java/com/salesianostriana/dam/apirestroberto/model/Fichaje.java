@@ -1,6 +1,7 @@
 package com.salesianostriana.dam.apirestroberto.model;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -17,12 +18,15 @@ public class Fichaje {
     @GeneratedValue
     private Long id;
 
+    @NotNull(message = "El momento del fichaje no puede ser nulo")
     private LocalDateTime momento;
 
+    @NotNull(message = "El tipo de fichaje no puede ser nulo")
     @Enumerated(EnumType.STRING)
     private Tipo tipo;
 
-    @ManyToOne()
+    @NotNull(message = "El empleado no puede ser nulo")
+    @ManyToOne
     @JoinColumn(name = "empleado_id", nullable = false)
     private Empleado empleado;
 
