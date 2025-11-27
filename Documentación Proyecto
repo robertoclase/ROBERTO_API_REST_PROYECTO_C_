@@ -1,0 +1,7 @@
+📋 GUÍA COMPLETA DE PRUEBAS Y CAPTURAS
+🚀 INSTRUCCIONES PARA PROBAR LA API
+1. INICIAR LA APLICACIÓN
+
+mvn spring-boot:run
+
+✅ CAPTURA: Terminal mostrando "Started RobertoApiRestProyectoCApplication"
