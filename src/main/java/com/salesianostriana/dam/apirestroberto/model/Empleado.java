@@ -36,6 +36,6 @@ public class Empleado {
     @JoinColumn(name = "departamento_id")
     private Departamento departamento;
 
-    @OneToMany(mappedBy = "empleado", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "empleado", fetch = FetchType.EAGER)
     private List<Fichaje> fichajes = new ArrayList<>();
 }

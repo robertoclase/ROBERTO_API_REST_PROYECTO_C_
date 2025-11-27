@@ -29,6 +29,6 @@ public class Departamento {
     @Positive(message = "El presupuesto debe ser mayor que 0")
     private BigDecimal presupuesto;
 
-    @OneToMany(mappedBy = "departamento", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "departamento", fetch = FetchType.EAGER)
     private List<Empleado> empleados = new ArrayList<>();
 }

@@ -1,0 +1,106 @@
+{
+  "info": {
+    "name": "Roberto API - Registro de Jornada",
+    "description": "Colección Postman para API de gestión de fichajes",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "Departamentos",
+      "item": [
+        {
+          "name": "Obtener todos los departamentos",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": "http://localhost:8080/api/v1/departamentos"
+          }
+        },
+        {
+          "name": "Crear departamento",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"nombre\": \"Recursos Humanos\",\n  \"presupuesto\": 40000\n}"
+            },
+            "url": "http://localhost:8080/api/v1/departamentos"
+          }
+        },
+        {
+          "name": "Obtener departamento por ID",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": "http://localhost:8080/api/v1/departamentos/1"
+          }
+        }
+      ]
+    },
+    {
+      "name": "Empleados",
+      "item": [
+        {
+          "name": "Obtener todos los empleados",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": "http://localhost:8080/api/v1/empleados"
+          }
+        },
+        {
+          "name": "Crear empleado",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"nombreCompleto\": \"Carlos Martínez\",\n  \"cargo\": \"Analista\",\n  \"salario\": 28000,\n  \"departamentoId\": 1\n}"
+            },
+            "url": "http://localhost:8080/api/v1/empleados"
+          }
+        },
+        {
+          "name": "Asignar departamento a empleado",
+          "request": {
+            "method": "PUT",
+            "header": [],
+            "url": "http://localhost:8080/api/v1/empleados/1/departamento/1"
+          }
+        }
+      ]
+    },
+    {
+      "name": "Fichajes",
+      "item": [
+        {
+          "name": "Registrar fichaje",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "url": "http://localhost:8080/api/v1/empleados/1/fichar"
+          }
+        },
+        {
+          "name": "Obtener fichajes de empleado",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": "http://localhost:8080/api/v1/empleados/1/fichajes"
+          }
+        }
+      ]
+    }
+  ]
+}
