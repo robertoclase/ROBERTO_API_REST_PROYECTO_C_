@@ -108,7 +108,4 @@ La API utiliza ProblemDetail para respuestas de error estandarizadas:
 Incluida en el proyecto: `ROBERTO_API_POSTMAN.json`
 
 ## 👨‍💻 Autor
-**Roberto** - Desarrollo del proyecto como parte del curso 2025-26
-
-## 📄 Licencia
-Este proyecto está bajo la Licencia MIT.
+**Roberto Montañés Ramos** - Desarrollo del proyecto como parte del curso 2025-26
