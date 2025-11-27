@@ -23,9 +23,7 @@ API REST desarrollada con Spring Boot para la gestión del registro de jornada l
 
 ## 📁 Estructura del Proyecto
 src/main/java/com/salesianostriana/dam/apirestroberto/
-
 ├── controller/ # Controladores REST
-
 ├── dto/ # Data Transfer Objects (Records)
 ├── exception/ # Manejo de excepciones
 ├── model/ # Entidades JPA
