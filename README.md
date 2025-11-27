@@ -34,9 +34,7 @@ src/main/java/com/salesianostriana/dam/apirestroberto/
 
 ├── repository/ # Repositorios Spring Data
 
-├── service/ # Lógica de negocio
-
-└── config/ # Configuraciones
+└── service/ # Lógica de negocio
 
 
 
@@ -57,8 +55,8 @@ src/main/java/com/salesianostriana/dam/apirestroberto/
 ### Swagger UI
 Disponible en: `http://localhost:8080/swagger-ui.html`
 
-### Endpoints principales
-
+### 🔗 Endpoints principales
+  
 #### Departamentos
 - `GET /api/v1/departamentos` - Listar todos
 - `POST /api/v1/departamentos` - Crear nuevo
