@@ -13,6 +13,8 @@ API REST desarrollada con Spring Boot para la gestión del registro de jornada l
 - **Base de datos H2** en memoria para desarrollo
 
 
+
+
 ## 📁 Estructura del Proyecto
 src/main/java/com/salesianostriana/dam/apirestroberto/
 
