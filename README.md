@@ -12,14 +12,6 @@ API REST desarrollada con Spring Boot para la gestión del registro de jornada l
 - **Manejo de errores** con ProblemDetail estándar
 - **Base de datos H2** en memoria para desarrollo
 
-## 🛠 Tecnologías
-- Java 17
-- Spring Boot 3.2.x
-- Spring Data JPA
-- H2 Database
-- Lombok
-- OpenAPI 3.0 / Swagger
-- Maven
 
 ## 📁 Estructura del Proyecto
 src/main/java/com/salesianostriana/dam/apirestroberto/
@@ -37,13 +29,6 @@ src/main/java/com/salesianostriana/dam/apirestroberto/
 └── service/ # Lógica de negocio
 
 
-
-
-## 🚀 Instalación y Ejecución
-
-### Prerrequisitos
-- Java 17
-- Maven 3.6+
 
 ### Pasos para ejecutar
 1. Clonar el repositorio
@@ -106,6 +91,3 @@ La API utiliza ProblemDetail para respuestas de error estandarizadas:
 
 ### Colección Postman
 Incluida en el proyecto: `ROBERTO_API_POSTMAN.json`
-
-## 👨‍💻 Autor
-**Roberto Montañés Ramos** - Desarrollo del proyecto como parte del curso 2025-26
