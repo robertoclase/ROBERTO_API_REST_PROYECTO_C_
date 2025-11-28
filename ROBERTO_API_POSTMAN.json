@@ -1,7 +1,7 @@
 {
   "info": {
     "name": "Roberto API - Registro de Jornada",
-    "description": "Colección Postman para API de gestión de fichajes",
+    "description": "Colección Postman completa para API de gestión de fichajes",
     "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
   },
   "item": [
@@ -9,7 +9,7 @@
       "name": "Departamentos",
       "item": [
         {
-          "name": "Obtener todos los departamentos",
+          "name": "1. Obtener todos los departamentos",
           "request": {
             "method": "GET",
             "header": [],
@@ -17,7 +17,7 @@
           }
         },
         {
-          "name": "Crear departamento",
+          "name": "2. Crear departamento",
           "request": {
             "method": "POST",
             "header": [
@@ -28,15 +28,40 @@
             ],
             "body": {
               "mode": "raw",
-              "raw": "{\n  \"nombre\": \"Recursos Humanos\",\n  \"presupuesto\": 40000\n}"
+              "raw": "{\n  \"nombre\": \"Desarrollo\",\n  \"presupuesto\": 50000\n}"
             },
             "url": "http://localhost:8080/api/v1/departamentos"
           }
         },
         {
-          "name": "Obtener departamento por ID",
+          "name": "3. Obtener departamento por ID",
           "request": {
             "method": "GET",
+            "header": [],
+            "url": "http://localhost:8080/api/v1/departamentos/1"
+          }
+        },
+        {
+          "name": "4. Actualizar departamento",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"nombre\": \"Desarrollo Actualizado\",\n  \"presupuesto\": 55000\n}"
+            },
+            "url": "http://localhost:8080/api/v1/departamentos/1"
+          }
+        },
+        {
+          "name": "5. Eliminar departamento",
+          "request": {
+            "method": "DELETE",
             "header": [],
             "url": "http://localhost:8080/api/v1/departamentos/1"
           }
@@ -47,7 +72,7 @@
       "name": "Empleados",
       "item": [
         {
-          "name": "Obtener todos los empleados",
+          "name": "1. Obtener todos los empleados",
           "request": {
             "method": "GET",
             "header": [],
@@ -55,7 +80,7 @@
           }
         },
         {
-          "name": "Crear empleado",
+          "name": "2. Crear empleado (sin departamento)",
           "request": {
             "method": "POST",
             "header": [
@@ -66,13 +91,46 @@
             ],
             "body": {
               "mode": "raw",
-              "raw": "{\n  \"nombreCompleto\": \"Carlos Martínez\",\n  \"cargo\": \"Analista\",\n  \"salario\": 28000,\n  \"departamentoId\": 1\n}"
+              "raw": "{\n  \"nombreCompleto\": \"Roberto García\",\n  \"cargo\": \"Desarrollador\",\n  \"salario\": 35000\n}"
             },
             "url": "http://localhost:8080/api/v1/empleados"
           }
         },
         {
-          "name": "Asignar departamento a empleado",
+          "name": "3. Obtener empleado por ID",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": "http://localhost:8080/api/v1/empleados/1"
+          }
+        },
+        {
+          "name": "4. Actualizar empleado",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"nombreCompleto\": \"Roberto García Actualizado\",\n  \"cargo\": \"Desarrollador Senior\",\n  \"salario\": 40000\n}"
+            },
+            "url": "http://localhost:8080/api/v1/empleados/1"
+          }
+        },
+        {
+          "name": "5. Eliminar empleado",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": "http://localhost:8080/api/v1/empleados/1"
+          }
+        },
+        {
+          "name": "6. Asignar departamento a empleado",
           "request": {
             "method": "PUT",
             "header": [],
@@ -85,7 +143,7 @@
       "name": "Fichajes",
       "item": [
         {
-          "name": "Registrar fichaje",
+          "name": "1. Registrar fichaje (ENTRADA)",
           "request": {
             "method": "POST",
             "header": [],
@@ -93,11 +151,57 @@
           }
         },
         {
-          "name": "Obtener fichajes de empleado",
+          "name": "2. Registrar fichaje (SALIDA)",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "url": "http://localhost:8080/api/v1/empleados/1/fichar"
+          }
+        },
+        {
+          "name": "3. Obtener fichajes de empleado",
           "request": {
             "method": "GET",
             "header": [],
             "url": "http://localhost:8080/api/v1/empleados/1/fichajes"
+          }
+        }
+      ]
+    },
+    {
+      "name": "Pruebas de Errores",
+      "item": [
+        {
+          "name": "1. Error 404 - Empleado no existe",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": "http://localhost:8080/api/v1/empleados/999"
+          }
+        },
+        {
+          "name": "2. Error 400 - Validación campos vacíos",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"nombre\": \"\",\n  \"presupuesto\": -100\n}"
+            },
+            "url": "http://localhost:8080/api/v1/departamentos"
+          }
+        },
+        {
+          "name": "3. Error 409 - Fichaje duplicado",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "url": "http://localhost:8080/api/v1/empleados/1/fichar"
           }
         }
       ]
